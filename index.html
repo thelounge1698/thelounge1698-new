@@ -50,7 +50,7 @@ HTML
                 <button onclick="openModal('guide-modal')" class="bg-white/10 hover:bg-white/15 text-sm font-semibold px-4 py-2 rounded-full border border-white/10 flex items-center gap-1.5 transition">
                     <span>📄</span> 안내서
                 </button>
-                <div id="txt-clock" class="text-3xl font-bold tracking-wide text-white/90 font-mono">오후 05:15</div>
+                <div id="txt-clock" class="text-3xl font-bold tracking-wide text-white/90 font-mono"></div>
             </div>
         </div>
 
@@ -61,7 +61,7 @@ HTML
                     <span>💡</span> <span>조명 모드</span>
                 </div>
                 <div class="flex-1 grid grid-rows-4 gap-3">
-                    <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5">
+                    <button onclick="triggerCheckIn(this)" class="light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5">
                         <span>💡</span> 체크인
                     </button>
                     <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
@@ -150,9 +150,8 @@ HTML
             </div>
 
             <div class="col-span-4 flex flex-col justify-between h-full gap-3">
-                
-                <button onclick="openModal('guide-modal')" class="w-full bg-gradient-to-br from-[#3b32e0] to-[#8f2cd4] rounded-[24px] p-6 text-left flex flex-col justify-between h-[45%] shadow-xl border border-white/10 hover:opacity-95 active:scale-[0.99] transition relative group overflow-hidden">
-                    <div class="absolute right-[-15px] bottom-[-20px] text-white/5 text-9xl font-black select-none pointer-events-none group-hover:scale-105 transition-transform">i</div>
+                <button onclick="openModal('guide-modal')" class="w-full bg-gradient-to-br from-[#3b32e0] to-[#8f2cd4] rounded-[24px] p-6 text-left flex flex-col justify-between h-[45%] shadow-xl border border-white/10 hover:opacity-95 transition relative group overflow-hidden">
+                    <div class="absolute right-[-15px] bottom-[-20px] text-white/5 text-9xl font-black pointer-events-none">i</div>
                     <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-xl shadow-inner">ℹ️</div>
                     <div>
                         <h3 class="text-2xl font-bold tracking-tight text-white mb-1">세부 안내문</h3>
@@ -165,70 +164,89 @@ HTML
                         <span>⚠️</span> <span>안전 주의사항</span>
                     </div>
                     <div class="flex flex-col gap-2 flex-1 justify-center">
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5 shadow-inner">
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
                             <span class="text-slate-200">음주수영 금지</span>
                             <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
                         </div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5 shadow-inner">
-                            <span class="text-slate-200">다이빙 금지 <span class="text-xs text-slate-500 font-medium ml-1">(수심 1m)</span></span>
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
+                            <span class="text-slate-200">다이빙 금지 <span class="text-xs text-slate-500 ml-1">(수심 1m)</span></span>
                             <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
                         </div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5 shadow-inner">
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
                             <span class="text-slate-200">뛰지 않기</span>
                             <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="flex justify-end items-center mt-4 pt-2 border-t border-white/5">
-            <button onclick="alert('CCTV 보안 모니터링이 정상 가동 중입니다.')" class="bg-[#18191b] hover:bg-[#202124] border border-white/5 px-4 py-2 rounded-xl text-xs font-bold text-slate-400 flex items-center gap-2 transition tracking-wide shadow-md">
+            <button onclick="alert('CCTV 보안 모니터링이 정상 가동 중입니다.')" class="bg-[#18191b] border border-white/5 px-4 py-2 rounded-xl text-xs font-bold text-slate-400 flex items-center gap-2">
                 <span>📹</span> CCTV 보안
             </button>
         </div>
-
     </div>
 
-    <div id="guide-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-6 z-50">
-        <div class="bg-[#1a1b1e] border border-white/10 w-full max-w-xl rounded-3xl p-7 max-h-[80vh] overflow-y-auto shadow-2xl">
+    <div id="guide-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-6 z-50">
+        <div class="bg-[#1a1b1e] border border-white/10 w-full max-w-xl rounded-3xl p-7">
             <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
                 <h3 class="text-xl font-bold text-white flex items-center gap-2">📖 매장 이용 가이드 안내</h3>
-                <button onclick="closeModal('guide-modal')" class="text-slate-400 hover:text-white text-2xl font-bold bg-white/5 w-8 h-8 rounded-full flex items-center justify-center transition">&times;</button>
+                <button onclick="closeModal('guide-modal')" class="text-slate-400 text-2xl font-bold bg-white/5 w-8 h-8 rounded-full">&times;</button>
             </div>
             <div class="space-y-4 text-sm text-slate-300">
                 <div class="bg-[#222327] p-4 rounded-xl border border-white/5">
                     <h4 class="font-bold text-purple-400 mb-1">🎬 프로젝터 빔 스크린 제어</h4>
-                    <p class="text-xs text-slate-400">벽면 전원 스위치를 켜신 후, 전용 스마트 리모컨의 홈 버튼을 눌러 원하는 넷플릭스/유튜브 콘텐츠를 실행하세요.</p>
-                </div>
-                <div class="bg-[#222327] p-4 rounded-xl border border-white/5">
-                    <h4 class="font-bold text-emerald-400 mb-1">🎤 노래방 기기 연결</h4>
-                    <p class="text-xs text-slate-400">조명 모드에서 '파티 모드'를 활성화하면 음향 싱크가 자동으로 대형 JBL 오디오 출력 라인으로 매칭됩니다.</p>
-                </div>
-                <div class="bg-[#222327] p-4 rounded-xl border border-white/5">
-                    <h4 class="font-bold text-rose-400 mb-1">🚮 샤워실 및 쓰레기 분리배출</h4>
-                    <p class="text-xs text-slate-400">퇴실 전 간단한 테이블 정리 및 주방 싱크대 하단 분리수거함을 이용하여 정리를 완수해 주시면 감사하겠습니다.</p>
+                    <p class="text-xs text-slate-400">벽면 전원 스위치를 켜신 후, 전용 스마트 리모컨의 홈 버튼을 눌러 콘텐츠를 실행하세요.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 시계 포맷팅 로직 (오후/오전 시간 갱신)
+        // ==========================================
+        // 🚨 여기에 발급받은 키와 ID를 붙여넣으세요! 🚨
+        // ==========================================
+        const MY_SMARTTHINGS_TOKEN = "09321ef2-4a2c-4604-be2d-1edfa94e42f0";
+        const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
+        // ==========================================
+
+        // 체크인 버튼을 눌렀을 때 실행되는 마법의 기능
+        function triggerCheckIn(target) {
+            // 1. 화면의 버튼 불빛 켜기
+            selectLightMode(target);
+
+            // 2. 스마트싱스로 신호 발사하기
+            fetch(`https://api.smartthings.com/v1/scenes/${MY_CHECKIN_SCENE_ID}/execute`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + MY_SMARTTHINGS_TOKEN,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if(response.ok) {
+                    alert("✨ 성공! 파티룸 체크인 조명이 켜졌습니다.");
+                } else {
+                    alert("⚠️ 신호 전송에 실패했습니다. 키와 ID를 다시 확인해 주세요.");
+                }
+            })
+            .catch(error => {
+                alert("⚠️ 인터넷 연결이나 통신에 문제가 발생했습니다.");
+            });
+        }
+
+        // 기존의 버튼 색상 변경 및 시계 기능 등
         function refreshClock() {
             const date = new Date();
             let hr = date.getHours();
             const min = String(date.getMinutes()).padStart(2, '0');
             const prefix = hr >= 12 ? '오후' : '오전';
-            hr = hr % 12;
-            hr = hr ? hr : 12;
+            hr = hr % 12; hr = hr ? hr : 12;
             document.getElementById('txt-clock').innerText = `${prefix} ${String(hr).padStart(2, '0')}:${min}`;
         }
-        setInterval(refreshClock, 1000);
-        refreshClock();
+        setInterval(refreshClock, 1000); refreshClock();
 
-        // 조명 모드 버튼 활성화 스타일 스위칭 토글
         function selectLightMode(target) {
             document.querySelectorAll('.light-btn').forEach(btn => {
                 btn.className = "light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition";
@@ -236,17 +254,11 @@ HTML
             target.className = "light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5";
         }
 
-        // 수치 가감 증감 로직 (+/- 실시간 수치 연동)
         function adjustTemp(targetId, offset) {
-            const element = document.getElementById(`temp-${targetId}`);
-            if (element) {
-                let currentVal = parseInt(element.innerText);
-                currentVal += offset;
-                element.innerText = currentVal;
-            }
+            const el = document.getElementById(`temp-${targetId}`);
+            if (el) el.innerText = parseInt(el.innerText) + offset;
         }
 
-        // 화면 팝업 모달 토글 컨트롤러
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
