@@ -8,29 +8,11 @@ HTML
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-        body {
-            font-family: 'Inter', 'Apple SD Gothic Neo', sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-            background-color: #0c0d0e;
-        }
-        .glass-panel {
-            background: rgba(24, 25, 27, 0.88);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-        }
-        .card-dark {
-            background: #1e1f22;
-            border: 1px solid rgba(255, 255, 255, 0.02);
-        }
-        .pulse-dot {
-            animation: pulse-animation 2s infinite;
-        }
-        @keyframes pulse-animation {
-            0% { opacity: 0.3; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.3; transform: scale(0.95); }
-        }
+        body { font-family: 'Inter', 'Apple SD Gothic Neo', sans-serif; -webkit-user-select: none; user-select: none; background-color: #0c0d0e; }
+        .glass-panel { background: rgba(24, 25, 27, 0.88); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); }
+        .card-dark { background: #1e1f22; border: 1px solid rgba(255, 255, 255, 0.02); }
+        .pulse-dot { animation: pulse-animation 2s infinite; }
+        @keyframes pulse-animation { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.3; transform: scale(0.95); } }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -45,7 +27,6 @@ HTML
                 </div>
                 <p class="text-xs text-slate-500 font-semibold mt-1 ml-7">Smart Space OS v1.0</p>
             </div>
-            
             <div class="flex items-center gap-4">
                 <button onclick="openModal('guide-modal')" class="bg-white/10 hover:bg-white/15 text-sm font-semibold px-4 py-2 rounded-full border border-white/10 flex items-center gap-1.5 transition">
                     <span>📄</span> 안내서
@@ -64,7 +45,7 @@ HTML
                     <button onclick="triggerCheckIn(this)" class="light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5">
                         <span>💡</span> 체크인
                     </button>
-                    <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
+                    <button onclick="triggerCheckOut(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
                         <span>💡</span> 체크아웃
                     </button>
                     <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
@@ -78,19 +59,13 @@ HTML
 
             <div class="col-span-5 flex flex-col h-full px-1">
                 <div class="flex justify-between items-center mb-3">
-                    <div class="flex items-center gap-2 text-[#5cc4a3] font-bold text-base pl-1">
-                        <span>🌡️</span> <span>공간 기후 제어</span>
-                    </div>
+                    <div class="flex items-center gap-2 text-[#5cc4a3] font-bold text-base pl-1"><span>🌡️</span> <span>공간 기후 제어</span></div>
                     <span class="text-[10px] font-black bg-[#152924] text-[#5cc4a3] px-2.5 py-0.5 rounded-full border border-[#23473e] tracking-wider">LG ThinQ</span>
                 </div>
-                
                 <div class="grid grid-cols-2 gap-3 flex-1 mb-3">
                     <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
                         <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">메인 홀</span>
-                        <div class="flex items-baseline mt-5">
-                            <span id="temp-main" class="text-4xl font-black tracking-tight text-white">22</span>
-                            <span class="text-lg font-bold text-slate-400 ml-0.5">°C</span>
-                        </div>
+                        <div class="flex items-baseline mt-5"><span id="temp-main" class="text-4xl font-black tracking-tight text-white">22</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
                         <div class="flex gap-2 w-full mt-2">
                             <button onclick="adjustTemp('main', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
                             <button onclick="adjustTemp('main', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
@@ -98,10 +73,7 @@ HTML
                     </div>
                     <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
                         <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">다이닝</span>
-                        <div class="flex items-baseline mt-5">
-                            <span id="temp-dining" class="text-4xl font-black tracking-tight text-white">23</span>
-                            <span class="text-lg font-bold text-slate-400 ml-0.5">°C</span>
-                        </div>
+                        <div class="flex items-baseline mt-5"><span id="temp-dining" class="text-4xl font-black tracking-tight text-white">23</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
                         <div class="flex gap-2 w-full mt-2">
                             <button onclick="adjustTemp('dining', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
                             <button onclick="adjustTemp('dining', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
@@ -109,10 +81,7 @@ HTML
                     </div>
                     <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
                         <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">게임 룸</span>
-                        <div class="flex items-baseline mt-5">
-                            <span id="temp-game" class="text-4xl font-black tracking-tight text-white">21</span>
-                            <span class="text-lg font-bold text-slate-400 ml-0.5">°C</span>
-                        </div>
+                        <div class="flex items-baseline mt-5"><span id="temp-game" class="text-4xl font-black tracking-tight text-white">21</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
                         <div class="flex gap-2 w-full mt-2">
                             <button onclick="adjustTemp('game', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
                             <button onclick="adjustTemp('game', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
@@ -120,17 +89,13 @@ HTML
                     </div>
                     <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
                         <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">휴게실</span>
-                        <div class="flex items-baseline mt-5">
-                            <span id="temp-rest" class="text-4xl font-black tracking-tight text-white">24</span>
-                            <span class="text-lg font-bold text-slate-400 ml-0.5">°C</span>
-                        </div>
+                        <div class="flex items-baseline mt-5"><span id="temp-rest" class="text-4xl font-black tracking-tight text-white">24</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
                         <div class="flex gap-2 w-full mt-2">
                             <button onclick="adjustTemp('rest', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
                             <button onclick="adjustTemp('rest', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
                         </div>
                     </div>
                 </div>
-
                 <div class="card-dark rounded-2xl p-4 flex justify-between items-center relative h-20">
                     <div class="flex flex-col justify-between h-full">
                         <span class="text-xs text-slate-400 font-bold">수영장 수온</span>
@@ -142,8 +107,7 @@ HTML
                             <button onclick="adjustTemp('pool', 1)" class="w-8 h-8 bg-[#2b2d31] hover:bg-[#35383e] rounded-lg text-lg font-bold flex items-center justify-center transition">+</button>
                         </div>
                         <div class="flex items-baseline bg-[#12221d] px-4 py-1.5 rounded-xl border border-teal-900/40">
-                            <span id="temp-pool" class="text-2xl font-black text-[#4ae0b0]">30</span>
-                            <span class="text-xs font-bold text-[#4ae0b0] ml-0.5">°C</span>
+                            <span id="temp-pool" class="text-2xl font-black text-[#4ae0b0]">30</span><span class="text-xs font-bold text-[#4ae0b0] ml-0.5">°C</span>
                         </div>
                     </div>
                 </div>
@@ -153,38 +117,20 @@ HTML
                 <button onclick="openModal('guide-modal')" class="w-full bg-gradient-to-br from-[#3b32e0] to-[#8f2cd4] rounded-[24px] p-6 text-left flex flex-col justify-between h-[45%] shadow-xl border border-white/10 hover:opacity-95 transition relative group overflow-hidden">
                     <div class="absolute right-[-15px] bottom-[-20px] text-white/5 text-9xl font-black pointer-events-none">i</div>
                     <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-xl shadow-inner">ℹ️</div>
-                    <div>
-                        <h3 class="text-2xl font-bold tracking-tight text-white mb-1">세부 안내문</h3>
-                        <p class="text-xs text-white/75 font-medium leading-relaxed">프로젝터, 샤워기 등 사용 방법</p>
-                    </div>
+                    <div><h3 class="text-2xl font-bold tracking-tight text-white mb-1">세부 안내문</h3><p class="text-xs text-white/75 font-medium leading-relaxed">프로젝터, 샤워기 등 사용 방법</p></div>
                 </button>
-
                 <div class="bg-[#2a1619]/50 border border-[#4d1f24] rounded-[24px] p-5 flex flex-col justify-between h-[55%] shadow-lg">
-                    <div class="flex items-center gap-2 text-[#e55365] font-bold text-sm mb-2 pl-1">
-                        <span>⚠️</span> <span>안전 주의사항</span>
-                    </div>
+                    <div class="flex items-center gap-2 text-[#e55365] font-bold text-sm mb-2 pl-1"><span>⚠️</span> <span>안전 주의사항</span></div>
                     <div class="flex flex-col gap-2 flex-1 justify-center">
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
-                            <span class="text-slate-200">음주수영 금지</span>
-                            <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
-                        </div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
-                            <span class="text-slate-200">다이빙 금지 <span class="text-xs text-slate-500 ml-1">(수심 1m)</span></span>
-                            <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
-                        </div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5">
-                            <span class="text-slate-200">뛰지 않기</span>
-                            <span class="text-[10px] pulse-dot text-rose-500">🔴</span>
-                        </div>
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">음주수영 금지</span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">다이빙 금지 <span class="text-xs text-slate-500 ml-1">(수심 1m)</span></span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
+                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">뛰지 않기</span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="flex justify-end items-center mt-4 pt-2 border-t border-white/5">
-            <button onclick="alert('CCTV 보안 모니터링이 정상 가동 중입니다.')" class="bg-[#18191b] border border-white/5 px-4 py-2 rounded-xl text-xs font-bold text-slate-400 flex items-center gap-2">
-                <span>📹</span> CCTV 보안
-            </button>
+            <button onclick="alert('CCTV 보안 모니터링이 정상 가동 중입니다.')" class="bg-[#18191b] border border-white/5 px-4 py-2 rounded-xl text-xs font-bold text-slate-400 flex items-center gap-2"><span>📹</span> CCTV 보안</button>
         </div>
     </div>
 
@@ -205,19 +151,18 @@ HTML
 
     <script>
         // ==========================================
-        // 🚨 여기에 발급받은 키와 ID를 붙여넣으세요! 🚨
+        // 🚨 여기에 3가지 정보를 모두 채워 넣어주세요! 🚨
         // ==========================================
         const MY_SMARTTHINGS_TOKEN = "09321ef2-4a2c-4604-be2d-1edfa94e42f0";
         const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
+        const MY_CHECKOUT_SCENE_ID = "4f77cee2-3343-4e68-b5b2-f57bf8fdae4d";
         // ==========================================
 
-        // 체크인 버튼을 눌렀을 때 실행되는 마법의 기능
-        function triggerCheckIn(target) {
-            // 1. 화면의 버튼 불빛 켜기
-            selectLightMode(target);
-
-            // 2. 스마트싱스로 신호 발사하기
-            fetch(`https://api.smartthings.com/v1/scenes/${MY_CHECKIN_SCENE_ID}/execute`, {
+        // 어떤 버튼이든 이 하나의 함수로 스마트싱스와 통신하게 업그레이드했습니다.
+        function triggerSmartThings(target, sceneId, modeName) {
+            selectLightMode(target); // 버튼 불빛 먼저 켜기
+            
+            fetch(`https://api.smartthings.com/v1/scenes/${sceneId}/execute`, {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + MY_SMARTTHINGS_TOKEN,
@@ -226,23 +171,22 @@ HTML
             })
             .then(response => {
                 if(response.ok) {
-                    alert("✨ 성공! 파티룸 체크인 조명이 켜졌습니다.");
+                    alert(`✨ 성공! 파티룸 [${modeName}] 모드가 실행되었습니다.`);
                 } else {
-                    alert("⚠️ 신호 전송에 실패했습니다. 키와 ID를 다시 확인해 주세요.");
+                    alert(`⚠️ 신호 전송에 실패했습니다. 키와 ID를 확인해 주세요.`);
                 }
             })
-            .catch(error => {
-                alert("⚠️ 인터넷 연결이나 통신에 문제가 발생했습니다.");
-            });
+            .catch(error => alert("⚠️ 인터넷 연결이나 통신에 문제가 발생했습니다."));
         }
 
-        // 기존의 버튼 색상 변경 및 시계 기능 등
+        // 체크인/체크아웃 버튼을 눌렀을 때 실행되는 연결고리
+        function triggerCheckIn(target) { triggerSmartThings(target, MY_CHECKIN_SCENE_ID, '체크인'); }
+        function triggerCheckOut(target) { triggerSmartThings(target, MY_CHECKOUT_SCENE_ID, '체크아웃'); }
+
+        // 기타 UI 관련 함수들
         function refreshClock() {
-            const date = new Date();
-            let hr = date.getHours();
-            const min = String(date.getMinutes()).padStart(2, '0');
-            const prefix = hr >= 12 ? '오후' : '오전';
-            hr = hr % 12; hr = hr ? hr : 12;
+            const date = new Date(); let hr = date.getHours(); const min = String(date.getMinutes()).padStart(2, '0');
+            const prefix = hr >= 12 ? '오후' : '오전'; hr = hr % 12; hr = hr ? hr : 12;
             document.getElementById('txt-clock').innerText = `${prefix} ${String(hr).padStart(2, '0')}:${min}`;
         }
         setInterval(refreshClock, 1000); refreshClock();
@@ -254,11 +198,7 @@ HTML
             target.className = "light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5";
         }
 
-        function adjustTemp(targetId, offset) {
-            const el = document.getElementById(`temp-${targetId}`);
-            if (el) el.innerText = parseInt(el.innerText) + offset;
-        }
-
+        function adjustTemp(targetId, offset) { const el = document.getElementById(`temp-${targetId}`); if (el) el.innerText = parseInt(el.innerText) + offset; }
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
