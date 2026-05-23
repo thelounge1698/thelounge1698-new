@@ -1,3 +1,10 @@
+아주 현명하신 선택입니다! 찔끔찔끔 여러 번 수정하는 것보다, 한 번에 모든 모드를 연동해서 싹 덮어쓰는 게 작업하기도 훨씬 편하고 깔끔하죠.
+
+자, 이제 파티룸의 4가지 핵심 조명 모드(체크인, 체크아웃, 파티 모드, 미팅 모드)가 모두 스마트싱스와 완벽하게 연결된 '진짜 최종 완성본' 코드입니다.
+
+스마트싱스 관리자 페이지에서 나머지 루틴 ID들만 마저 찾으신 다음, 아래 코드 맨 밑에 있는 5개의 빈칸(마스터키 1개 + 루틴 ID 4개)만 딱 채워주시면 모든 작업이 끝납니다.
+
+전체 코드 덮어쓰기 (index.html)
 HTML
 <!DOCTYPE html>
 <html lang="ko">
@@ -42,16 +49,16 @@ HTML
                     <span>💡</span> <span>조명 모드</span>
                 </div>
                 <div class="flex-1 grid grid-rows-4 gap-3">
-                    <button onclick="triggerCheckIn(this)" class="light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5">
+                    <button onclick="triggerCheckIn(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
                         <span>💡</span> 체크인
                     </button>
                     <button onclick="triggerCheckOut(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
                         <span>💡</span> 체크아웃
                     </button>
-                    <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
+                    <button onclick="triggerPartyMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
                         <span>💡</span> 파티 모드
                     </button>
-                    <button onclick="selectLightMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
+                    <button onclick="triggerMeetingMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
                         <span>💡</span> 미팅 모드
                     </button>
                 </div>
@@ -151,17 +158,17 @@ HTML
 
     <script>
         // ==========================================
-        // 🚨 여기에 3가지 정보를 모두 채워 넣어주세요! 🚨
+        // 🚨 여기에 총 5가지 정보를 정확히 채워 넣어주세요! 🚨
         // ==========================================
         const MY_SMARTTHINGS_TOKEN = "09321ef2-4a2c-4604-be2d-1edfa94e42f0";
         const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
         const MY_CHECKOUT_SCENE_ID = "4f77cee2-3343-4e68-b5b2-f57bf8fdae4d";
+        const MY_PARTY_SCENE_ID = "fc20454a-b270-414e-b45d-164fdd647242";
+        const MY_MEETING_SCENE_ID = "71323fb1-9a7b-47b1-8a6d-b1a1fbc3909e";
         // ==========================================
 
-        // 어떤 버튼이든 이 하나의 함수로 스마트싱스와 통신하게 업그레이드했습니다.
         function triggerSmartThings(target, sceneId, modeName) {
-            selectLightMode(target); // 버튼 불빛 먼저 켜기
-            
+            selectLightMode(target); 
             fetch(`https://api.smartthings.com/v1/scenes/${sceneId}/execute`, {
                 method: 'POST',
                 headers: {
@@ -173,17 +180,19 @@ HTML
                 if(response.ok) {
                     alert(`✨ 성공! 파티룸 [${modeName}] 모드가 실행되었습니다.`);
                 } else {
-                    alert(`⚠️ 신호 전송에 실패했습니다. 키와 ID를 확인해 주세요.`);
+                    alert(`⚠️ 신호 전송에 실패했습니다. 키와 ID를 다시 확인해 주세요.`);
                 }
             })
             .catch(error => alert("⚠️ 인터넷 연결이나 통신에 문제가 발생했습니다."));
         }
 
-        // 체크인/체크아웃 버튼을 눌렀을 때 실행되는 연결고리
+        // 4개의 버튼 클릭 시 각각 실행될 통신 함수들
         function triggerCheckIn(target) { triggerSmartThings(target, MY_CHECKIN_SCENE_ID, '체크인'); }
         function triggerCheckOut(target) { triggerSmartThings(target, MY_CHECKOUT_SCENE_ID, '체크아웃'); }
+        function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, '파티 모드'); }
+        function triggerMeetingMode(target) { triggerSmartThings(target, MY_MEETING_SCENE_ID, '미팅 모드'); }
 
-        // 기타 UI 관련 함수들
+        // UI 제어 함수들
         function refreshClock() {
             const date = new Date(); let hr = date.getHours(); const min = String(date.getMinutes()).padStart(2, '0');
             const prefix = hr >= 12 ? '오후' : '오전'; hr = hr % 12; hr = hr ? hr : 12;
