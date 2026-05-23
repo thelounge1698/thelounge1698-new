@@ -1,0 +1,53 @@
+HTML
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Room Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen p-8">
+    <div id="app" class="max-w-6xl mx-auto">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-black">THE VOID</h1>
+            <div id="clock" class="text-3xl font-mono bg-slate-900 px-6 py-3 rounded-2xl">00:00:00</div>
+        </header>
+
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-8 space-y-6">
+                <div class="grid grid-cols-4 gap-4">
+                    <button class="p-6 bg-slate-800 rounded-2xl text-xl font-bold hover:bg-yellow-600 transition">체크인</button>
+                    <button class="p-6 bg-slate-800 rounded-2xl text-xl font-bold hover:bg-yellow-600 transition">체크아웃</button>
+                    <button class="p-6 bg-slate-800 rounded-2xl text-xl font-bold hover:bg-yellow-600 transition">파티모드</button>
+                    <button class="p-6 bg-slate-800 rounded-2xl text-xl font-bold hover:bg-yellow-600 transition">미팅모드</button>
+                </div>
+                <div class="bg-slate-900 p-8 rounded-3xl border border-slate-700">
+                    <h2 class="text-2xl font-bold text-teal-400 mb-6">냉난방 제어</h2>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="bg-slate-950 p-6 rounded-2xl text-center">메인홀 22°C</div>
+                        <div class="bg-slate-950 p-6 rounded-2xl text-center">다이닝 22°C</div>
+                        <div class="bg-slate-950 p-6 rounded-2xl text-center">게임룸 22°C</div>
+                        <div class="bg-slate-950 p-6 rounded-2xl text-center">휴게실 22°C</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-4 bg-rose-950/30 border-2 border-rose-900 rounded-3xl p-8">
+                <h2 class="text-3xl font-bold text-rose-500 mb-6">안전 주의사항</h2>
+                <ul class="space-y-4 text-2xl text-rose-200">
+                    <li>🔴 음주수영 금지</li>
+                    <li>🔴 다이빙금지 (수심 1미터)</li>
+                    <li>🔴 뛰지 않기</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+    </script>
+</body>
+</html>
