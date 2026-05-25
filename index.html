@@ -4,164 +4,239 @@ HTML
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP PARTY ROOM - Smart Space OS</title>
+    <title>The Lounge 1698 - Smart Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-        body { font-family: 'Inter', 'Apple SD Gothic Neo', sans-serif; -webkit-user-select: none; user-select: none; background-color: #0c0d0e; }
-        .glass-panel { background: rgba(24, 25, 27, 0.88); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); }
-        .card-dark { background: #1e1f22; border: 1px solid rgba(255, 255, 255, 0.02); }
-        .pulse-dot { animation: pulse-animation 2s infinite; }
-        @keyframes pulse-animation { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.3; transform: scale(0.95); } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --apple-bg: #f5f5f7;
+            --apple-glass: rgba(255, 255, 255, 0.75);
+            --apple-text: #1d1d1f;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #e2e2e2 0%, #ffffff 100%);
+            color: var(--apple-text);
+            min-height: 100vh;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* 애플 특유의 반투명 유리 효과 */
+        .apple-glass {
+            background: var(--apple-glass);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .widget-card {
+            background: white;
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .widget-card:active {
+            transform: scale(0.96);
+        }
+
+        .active-btn {
+            background: #0071e3 !important;
+            color: white !important;
+            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.2);
+        }
+
+        #txt-clock {
+            letter-spacing: -1px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .dot-green { background-color: #34c759; box-shadow: 0 0 8px #34c759; }
+
+        .info-gradient {
+            background: linear-gradient(135deg, #6e67e7 0%, #a46ad3 100%);
+            color: white;
+        }
+        
+        .weather-badge {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="flex items-center justify-center p-6">
 
-    <div class="w-full max-w-[1024px] aspect-[4/3] glass-panel rounded-[36px] p-8 flex flex-col justify-between border border-white/10 shadow-2xl overflow-hidden">
+    <div class="w-full max-w-5xl h-[720px] apple-glass rounded-[48px] p-10 flex flex-col shadow-2xl relative overflow-hidden">
         
-        <div class="flex justify-between items-start mb-4">
+        <header class="flex justify-between items-end mb-10">
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="text-[#e2b747] text-2xl font-bold">✨</span>
-                    <h1 class="text-3xl font-black tracking-tight text-white">VIP PARTY ROOM</h1>
-                </div>
-                <p class="text-xs text-slate-500 font-semibold mt-1 ml-7">Smart Space OS v1.0</p>
+                <h1 class="text-4xl font-bold tracking-tight mb-1">The Lounge 1698</h1>
+                <p class="text-sm font-medium text-slate-500 opacity-60">Smart Space OS v2.0</p>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="openModal('guide-modal')" class="bg-white/10 hover:bg-white/15 text-sm font-semibold px-4 py-2 rounded-full border border-white/10 flex items-center gap-1.5 transition">
-                    <span>📄</span> 안내서
-                </button>
-                <div id="txt-clock" class="text-3xl font-bold tracking-wide text-white/90 font-mono"></div>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-12 gap-5 flex-1 mt-4">
             
-            <div class="col-span-3 flex flex-col h-full">
-                <div class="flex items-center gap-2 text-[#e2b747] font-bold text-base mb-3 pl-1">
-                    <span>💡</span> <span>조명 모드</span>
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-4 mb-1">
+                    <div id="weather-info" class="weather-badge px-4 py-1.5 rounded-full flex items-center gap-2 text-xl font-bold text-slate-600 shadow-sm hidden">
+                        <span id="weather-icon">☁️</span>
+                        <span id="weather-temp">--°C</span>
+                    </div>
+                    <div id="txt-clock" class="text-5xl font-semibold">00:00</div>
                 </div>
-                <div class="flex-1 grid grid-rows-4 gap-3">
-                    <button onclick="triggerCheckIn(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
-                        <span>💡</span> 체크인
+                <div id="txt-date" class="text-sm font-bold text-slate-400">날짜 로딩중...</div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-12 gap-6 flex-1">
+            
+            <div class="col-span-3 space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2">Scenes</h2>
+                <div class="grid grid-rows-4 gap-3 h-[85%]">
+                    <button onclick="triggerCheckIn(this)" class="light-btn widget-card w-full flex items-center p-5 text-lg font-semibold gap-4 hover:bg-slate-50">
+                        <i class="fa-solid fa-house-user text-[#0071e3]"></i> 체크인
                     </button>
-                    <button onclick="triggerCheckOut(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
-                        <span>💡</span> 체크아웃
+                    <button onclick="triggerCheckOut(this)" class="light-btn widget-card w-full flex items-center p-5 text-lg font-semibold gap-4 hover:bg-slate-50">
+                        <i class="fa-solid fa-power-off text-slate-400"></i> 체크아웃
                     </button>
-                    <button onclick="triggerPartyMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
-                        <span>💡</span> 파티 모드
+                    <button onclick="triggerPartyMode(this)" class="light-btn widget-card w-full flex items-center p-5 text-lg font-semibold gap-4 hover:bg-slate-50">
+                        <i class="fa-solid fa-champagne-glasses text-[#ff2d55]"></i> 파티 모드
                     </button>
-                    <button onclick="triggerMeetingMode(this)" class="light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition">
-                        <span>💡</span> 미팅 모드
+                    <button onclick="triggerMeetingMode(this)" class="light-btn widget-card w-full flex items-center p-5 text-lg font-semibold gap-4 hover:bg-slate-50">
+                        <i class="fa-solid fa-laptop-code text-[#5856d6]"></i> 미팅 모드
                     </button>
                 </div>
             </div>
 
-            <div class="col-span-5 flex flex-col h-full px-1">
-                <div class="flex justify-between items-center mb-3">
-                    <div class="flex items-center gap-2 text-[#5cc4a3] font-bold text-base pl-1"><span>🌡️</span> <span>공간 기후 제어</span></div>
-                    <span class="text-[10px] font-black bg-[#152924] text-[#5cc4a3] px-2.5 py-0.5 rounded-full border border-[#23473e] tracking-wider">LG ThinQ</span>
+            <div class="col-span-5 space-y-4">
+                <div class="flex justify-between items-center px-2">
+                    <h2 class="text-xs font-bold text-slate-400 tracking-widest">온도 제어</h2>
+                    <span class="text-[10px] font-bold bg-slate-200 text-slate-500 px-2 py-0.5 rounded-full">LG ThinQ Linked</span>
                 </div>
-                <div class="grid grid-cols-2 gap-3 flex-1 mb-3">
-                    <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
-                        <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">메인 홀</span>
-                        <div class="flex items-baseline mt-5"><span id="temp-main" class="text-4xl font-black tracking-tight text-white">22</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
-                        <div class="flex gap-2 w-full mt-2">
-                            <button onclick="adjustTemp('main', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
-                            <button onclick="adjustTemp('main', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
+                
+                <div class="grid grid-cols-2 gap-4 h-[85%] pb-2">
+                    <div class="widget-card p-5 flex flex-col justify-between bg-white/50 border border-white">
+                        <span class="text-xs font-bold text-slate-400">메인 홀</span>
+                        <div class="flex items-center justify-between">
+                            <span id="temp-main" class="text-4xl font-bold tracking-tighter">22°</span>
+                            <div class="flex flex-col gap-1">
+                                <button onclick="adjustTemp('main', 1)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                <button onclick="adjustTemp('main', -1)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
-                        <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">다이닝</span>
-                        <div class="flex items-baseline mt-5"><span id="temp-dining" class="text-4xl font-black tracking-tight text-white">23</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
-                        <div class="flex gap-2 w-full mt-2">
-                            <button onclick="adjustTemp('dining', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
-                            <button onclick="adjustTemp('dining', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
+                    <div class="widget-card p-5 flex flex-col justify-between bg-white/50 border border-white">
+                        <span class="text-xs font-bold text-slate-400">다이닝</span>
+                        <div class="flex items-center justify-between">
+                            <span id="temp-dining" class="text-4xl font-bold tracking-tighter">23°</span>
+                            <div class="flex flex-col gap-1">
+                                <button onclick="adjustTemp('dining', 1)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                <button onclick="adjustTemp('dining', -1)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
-                        <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">게임 룸</span>
-                        <div class="flex items-baseline mt-5"><span id="temp-game" class="text-4xl font-black tracking-tight text-white">21</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
-                        <div class="flex gap-2 w-full mt-2">
-                            <button onclick="adjustTemp('game', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
-                            <button onclick="adjustTemp('game', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
+
+                    <div onclick="openTouchSmartApp()" class="widget-card p-5 flex flex-col justify-between bg-white/50 border border-white cursor-pointer hover:bg-blue-50/50 transition group">
+                        <div class="flex justify-between items-start">
+                            <span class="text-xs font-bold text-slate-400">수영장 수온 제어</span>
+                            <span class="text-[9px] font-black bg-blue-100 text-[#0071e3] px-1.5 py-0.5 rounded">ELECTRO</span>
+                        </div>
+                        <div class="flex items-baseline justify-between mt-4">
+                            <span class="text-sm font-bold text-slate-500 group-hover:text-[#0071e3] transition">설정 앱 열기</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#0071e3] flex items-center justify-center transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-slate-400 group-hover:text-white transition"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-dark rounded-2xl p-4 flex flex-col justify-between items-center relative">
-                        <span class="text-xs text-slate-400 font-bold absolute top-3 left-4">휴게실</span>
-                        <div class="flex items-baseline mt-5"><span id="temp-rest" class="text-4xl font-black tracking-tight text-white">24</span><span class="text-lg font-bold text-slate-400 ml-0.5">°C</span></div>
-                        <div class="flex gap-2 w-full mt-2">
-                            <button onclick="adjustTemp('rest', -1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">-</button>
-                            <button onclick="adjustTemp('rest', 1)" class="flex-1 py-1 bg-[#2b2d31] hover:bg-[#35383e] active:scale-95 rounded-xl text-xl font-black text-slate-300 transition">+</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-dark rounded-2xl p-4 flex justify-between items-center relative h-20">
-                    <div class="flex flex-col justify-between h-full">
-                        <span class="text-xs text-slate-400 font-bold">수영장 수온</span>
-                        <span class="text-[9px] font-black bg-[#142332] text-[#4ea1d5] px-2 py-0.5 rounded border border-[#213f5a] w-max tracking-wide">ELECRO</span>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <div class="flex gap-1.5">
-                            <button onclick="adjustTemp('pool', -1)" class="w-8 h-8 bg-[#2b2d31] hover:bg-[#35383e] rounded-lg text-lg font-bold flex items-center justify-center transition">-</button>
-                            <button onclick="adjustTemp('pool', 1)" class="w-8 h-8 bg-[#2b2d31] hover:bg-[#35383e] rounded-lg text-lg font-bold flex items-center justify-center transition">+</button>
-                        </div>
-                        <div class="flex items-baseline bg-[#12221d] px-4 py-1.5 rounded-xl border border-teal-900/40">
-                            <span id="temp-pool" class="text-2xl font-black text-[#4ae0b0]">30</span><span class="text-xs font-bold text-[#4ae0b0] ml-0.5">°C</span>
-                        </div>
+
+                    <div class="widget-card p-5 flex flex-col justify-center items-center bg-[#f2f2f7] border-none shadow-inner">
+                        <i class="fa-solid fa-fan text-3xl text-slate-300 mb-2"></i>
+                        <span class="text-[11px] font-bold text-slate-400">자동 공기 정화 중</span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-span-4 flex flex-col justify-between h-full gap-3">
-                <button onclick="openModal('guide-modal')" class="w-full bg-gradient-to-br from-[#3b32e0] to-[#8f2cd4] rounded-[24px] p-6 text-left flex flex-col justify-between h-[45%] shadow-xl border border-white/10 hover:opacity-95 transition relative group overflow-hidden">
-                    <div class="absolute right-[-15px] bottom-[-20px] text-white/5 text-9xl font-black pointer-events-none">i</div>
-                    <div class="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-xl shadow-inner">ℹ️</div>
-                    <div><h3 class="text-2xl font-bold tracking-tight text-white mb-1">세부 안내문</h3><p class="text-xs text-white/75 font-medium leading-relaxed">프로젝터, 샤워기 등 사용 방법</p></div>
-                </button>
-                <div class="bg-[#2a1619]/50 border border-[#4d1f24] rounded-[24px] p-5 flex flex-col justify-between h-[55%] shadow-lg">
-                    <div class="flex items-center gap-2 text-[#e55365] font-bold text-sm mb-2 pl-1"><span>⚠️</span> <span>안전 주의사항</span></div>
-                    <div class="flex flex-col gap-2 flex-1 justify-center">
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">음주수영 금지</span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">다이빙 금지 <span class="text-xs text-slate-500 ml-1">(수심 1m)</span></span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
-                        <div class="bg-[#141517]/80 px-4 py-3 rounded-xl text-sm font-bold flex items-center justify-between border border-white/5"><span class="text-slate-200">뛰지 않기</span><span class="text-[10px] pulse-dot text-rose-500">🔴</span></div>
+            <div class="col-span-4 space-y-4">
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest px-2">Information</h2>
+                <div class="h-[85%] flex flex-col gap-4">
+                    <button onclick="openModal('guide-modal')" class="widget-card info-gradient p-6 text-left flex flex-col justify-between flex-1 shadow-lg active:scale-95">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg shadow-inner"><i class="fa-solid fa-info"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">세부 안내문</h3>
+                            <p class="text-xs opacity-80 leading-relaxed">프로젝터 및 오디오 사용 가이드</p>
+                        </div>
+                    </button>
+                    
+                    <div class="widget-card p-6 bg-rose-50 border border-rose-100 flex-1">
+                        <div class="flex items-center gap-2 text-rose-500 font-bold mb-4">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span class="text-xs tracking-tighter">Safety Rules</span>
+                        </div>
+                        <ul class="space-y-3 text-[13px] font-semibold text-rose-800">
+                            <li>• 음주 후 수영 절대 금지</li>
+                            <li>• 수심이 낮으니 다이빙 금지</li>
+                            <li>• 젖은 손으로 전자기기 조작 금지</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="flex justify-end items-center mt-4 pt-2 border-t border-white/5">
-            <button onclick="alert('CCTV 보안 모니터링이 정상 가동 중입니다.')" class="bg-[#18191b] border border-white/5 px-4 py-2 rounded-xl text-xs font-bold text-slate-400 flex items-center gap-2"><span>📹</span> CCTV 보안</button>
-        </div>
+
+        <footer class="mt-8 pt-6 border-t border-slate-200/50 flex justify-between items-center text-[11px] font-bold text-slate-400">
+            <button onclick="openReolinkApp()" class="flex items-center bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl transition shadow-sm active:scale-95">
+                <span class="status-dot dot-green"></span> CCTV 보안 시스템 가동 중 (클릭 시 앱 오픈)
+            </button>
+            <div>Designed for The Lounge 1698 by SmartOS</div>
+        </footer>
     </div>
 
-    <div id="guide-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-6 z-50">
-        <div class="bg-[#1a1b1e] border border-white/10 w-full max-w-xl rounded-3xl p-7">
-            <div class="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2">📖 매장 이용 가이드 안내</h3>
-                <button onclick="closeModal('guide-modal')" class="text-slate-400 text-2xl font-bold bg-white/5 w-8 h-8 rounded-full">&times;</button>
+    <div id="guide-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center p-6 z-50">
+        <div class="bg-white rounded-[32px] w-full max-w-xl p-10 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold tracking-tight">매장 이용 가이드</h3>
+                <button onclick="closeModal('guide-modal')" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-2xl">&times;</button>
             </div>
-            <div class="space-y-4 text-sm text-slate-300">
-                <div class="bg-[#222327] p-4 rounded-xl border border-white/5">
-                    <h4 class="font-bold text-purple-400 mb-1">🎬 프로젝터 빔 스크린 제어</h4>
-                    <p class="text-xs text-slate-400">벽면 전원 스위치를 켜신 후, 전용 스마트 리모컨의 홈 버튼을 눌러 콘텐츠를 실행하세요.</p>
+            <div class="space-y-6">
+                <div class="p-5 bg-slate-50 rounded-2xl">
+                    <h4 class="font-bold mb-2">🎬 프로젝터 빔 제어</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">스마트 리모컨의 '홈' 버튼을 누르고 넷플릭스 또는 유튜브 앱을 실행해 주세요.</p>
+                </div>
+                <div class="p-5 bg-slate-50 rounded-2xl">
+                    <h4 class="font-bold mb-2">🚿 샤워실 이용</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed">샤워실 온수는 왼쪽으로 돌리면 나옵니다. 사용 후에는 꼭 전원을 꺼주세요.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // 🚨 여기에 총 5가지 정보를 정확히 채워 넣어주세요! 🚨
-        // ==========================================
+        // ========================================================
+        // 🚨 [필독] 출근 후 아래 5가지 빈칸 정보를 꼭 채워 넣어주세요! 🚨
+        // ========================================================
         const MY_SMARTTHINGS_TOKEN = "09321ef2-4a2c-4604-be2d-1edfa94e42f0";
         const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
         const MY_CHECKOUT_SCENE_ID = "4f77cee2-3343-4e68-b5b2-f57bf8fdae4d";
         const MY_PARTY_SCENE_ID = "fc20454a-b270-414e-b45d-164fdd647242";
         const MY_MEETING_SCENE_ID = "71323fb1-9a7b-47b1-8a6d-b1a1fbc3909e";
-        // ==========================================
+        // ========================================================
 
+        // 스마트싱스 API 핵심 통신 시스템
         function triggerSmartThings(target, sceneId, modeName) {
-            selectLightMode(target); 
+            document.querySelectorAll('.light-btn').forEach(btn => btn.classList.remove('active-btn'));
+            target.classList.add('active-btn');
+            
             fetch(`https://api.smartthings.com/v1/scenes/${sceneId}/execute`, {
                 method: 'POST',
                 headers: {
@@ -169,40 +244,88 @@ HTML
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => {
-                if(response.ok) {
-                    alert(`✨ 성공! 파티룸 [${modeName}] 모드가 실행되었습니다.`);
-                } else {
-                    alert(`⚠️ 신호 전송에 실패했습니다. 키와 ID를 다시 확인해 주세요.`);
-                }
+            .then(res => {
+                if(res.ok) console.log(`모드 실행 완료: ${modeName}`);
             })
-            .catch(error => alert("⚠️ 인터넷 연결이나 통신에 문제가 발생했습니다."));
+            .catch(err => alert("통신 에러가 발생했습니다."));
         }
 
-        // 4개의 버튼 클릭 시 각각 실행될 통신 함수들
         function triggerCheckIn(target) { triggerSmartThings(target, MY_CHECKIN_SCENE_ID, '체크인'); }
         function triggerCheckOut(target) { triggerSmartThings(target, MY_CHECKOUT_SCENE_ID, '체크아웃'); }
         function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, '파티 모드'); }
         function triggerMeetingMode(target) { triggerSmartThings(target, MY_MEETING_SCENE_ID, '미팅 모드'); }
 
-        // UI 제어 함수들
-        function refreshClock() {
-            const date = new Date(); let hr = date.getHours(); const min = String(date.getMinutes()).padStart(2, '0');
-            const prefix = hr >= 12 ? '오후' : '오전'; hr = hr % 12; hr = hr ? hr : 12;
-            document.getElementById('txt-clock').innerText = `${prefix} ${String(hr).padStart(2, '0')}:${min}`;
-        }
-        setInterval(refreshClock, 1000); refreshClock();
-
-        function selectLightMode(target) {
-            document.querySelectorAll('.light-btn').forEach(btn => {
-                btn.className = "light-btn w-full text-left px-5 rounded-2xl card-dark text-slate-400 font-bold text-lg flex items-center gap-3 border border-transparent hover:border-white/5 transition";
-            });
-            target.className = "light-btn w-full text-left px-5 rounded-2xl border-2 border-[#e2b747] bg-[#e2b747]/10 text-white font-bold text-lg flex items-center gap-3 transition shadow-lg shadow-yellow-500/5";
+        // TouchSmart 수온조절 앱 호출 시스템
+        function openTouchSmartApp() {
+            const appUri = "touchsmart://"; 
+            window.location.href = appUri;
+            setTimeout(() => {
+                if (!document.hidden) {
+                    alert("TouchSmart 앱을 자동으로 켜지 못했습니다. 태블릿에 앱이 올바르게 설치되어 있는지 확인해 주세요.");
+                }
+            }, 1500);
         }
 
-        function adjustTemp(targetId, offset) { const el = document.getElementById(`temp-${targetId}`); if (el) el.innerText = parseInt(el.innerText) + offset; }
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        // Reolink CCTV 앱 호출 시스템
+        function openReolinkApp() {
+            const appUri = "reolink://"; 
+            window.location.href = appUri;
+            setTimeout(() => {
+                if (!document.hidden) {
+                    alert("Reolink 앱을 자동으로 켜지 못했습니다. 바탕화면에서 직접 실행해 주세요!");
+                }
+            }, 1500);
+        }
+
+        // 실시간 시간 및 날짜(요일 포함) 자동 반영 시스템
+        function refreshTimeAndDate() {
+            const date = new Date();
+            const hr = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
+            document.getElementById('txt-clock').innerText = `${hr}:${min}`;
+            
+            const days = ['일', '월', '화', '수', '목', '금', '토'];
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayOfWeek = days[date.getDay()];
+            document.getElementById('txt-date').innerText = `${month}월 ${day}일 ${dayOfWeek}요일`;
+        }
+        setInterval(refreshTimeAndDate, 1000); 
+        refreshTimeAndDate();
+
+        // 실시간 날씨 연동 시스템 (Open-Meteo 외부망 무료 자동 연동)
+        async function fetchWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.566&longitude=126.978&current_weather=true&timezone=Asia%2FSeoul');
+                const data = await res.json();
+                const temp = Math.round(data.current_weather.temperature);
+                const code = data.current_weather.weathercode;
+                
+                let icon = '☁️';
+                if (code === 0) icon = '☀️';
+                else if (code === 1 || code === 2 || code === 3) icon = '⛅️';
+                else if (code >= 45 && code <= 48) icon = '🌫';
+                else if (code >= 51 && code <= 67) icon = '🌧';
+                else if (code >= 71 && code <= 77) icon = '❄️';
+                else if (code >= 95) icon = '⛈';
+
+                document.getElementById('weather-icon').innerText = icon;
+                document.getElementById('weather-temp').innerText = `${temp}°C`;
+                document.getElementById('weather-info').classList.remove('hidden');
+            } catch (err) {
+                console.log("날씨 데이터를 연동하지 못했습니다.");
+            }
+        }
+        fetchWeather();
+        setInterval(fetchWeather, 30 * 60 * 1000); // 30분 주기로 날씨 정보 업데이트
+
+        function adjustTemp(id, offset) {
+            const el = document.getElementById(`temp-${id}`);
+            if(el) el.innerText = (parseInt(el.innerText) + offset) + "°";
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
     </script>
 </body>
 </html>
