@@ -1,4 +1,3 @@
-HTML
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -11,13 +10,13 @@ HTML
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         :root {
-            --apple-glass: rgba(255, 255, 255, 0.75);
             --apple-text: #1d1d1f;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #e2e2e2 0%, #ffffff 100%);
+            /* 🎨 수정됨: 프리미엄 이미지와 100% 동일한 깊이감 있는 메탈릭 실버 그라데이션 배경 */
+            background: radial-gradient(circle at top left, #f4f5f7 0%, #e1e3e8 40%, #c4c8d0 100%);
             color: var(--apple-text);
             min-height: 100vh;
             overflow: hidden;
@@ -25,25 +24,23 @@ HTML
             user-select: none;
         }
 
-        /* 이미지 속 투명 에어로 유리 패널 효과 */
+        /* 🎨 수정됨: 뒷배경의 실버 색상이 은은하게 비치는 고급스러운 불투명 서리유리(Frosted Glass) 효과 */
         .apple-glass {
-            background: var(--apple-glass);
-            backdrop-filter: blur(30px) saturate(190%);
-            -webkit-backdrop-filter: blur(30px) saturate(190%);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
         }
 
-        /* 이미지 스펙에 맞춘 정사각형 및 직사각형 카드 시스템 */
         .widget-card {
             background: white;
             border-radius: 20px;
             border: 1px solid rgba(0, 0, 0, 0.03);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* 이미지 속 체크인 버튼처럼 활성화된 상태의 프리미엄 테두리 및 그림자 효과 */
         .active-btn {
             border-color: #e2b747 !important;
             box-shadow: 0 0 20px rgba(226, 183, 71, 0.18) !important;
@@ -54,8 +51,8 @@ HTML
         }
 
         .weather-badge {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
         }
     </style>
@@ -78,8 +75,8 @@ HTML
                     <span id="weather-temp">--°C</span>
                 </div>
                 <div class="text-right">
-                    <div id="txt-date" class="text-xs font-bold text-slate-400 mb-0.5">2026년 5월 25일 월요일</div>
-                    <div id="txt-clock" class="text-4xl font-black text-slate-800 tracking-tight">오후 05:15</div>
+                    <div id="txt-date" class="text-xs font-bold text-slate-400 mb-0.5">날짜 로딩중...</div>
+                    <div id="txt-clock" class="text-4xl font-black text-slate-800 tracking-tight">00:00</div>
                 </div>
             </div>
         </header>
@@ -210,7 +207,7 @@ HTML
 
     <script>
         // =======================================================================
-        // 🚨 [필독] 내일 출근 후 기존에 쓰시던 고유 키 5가지를 여기에 꼭 다시 채워주세요!
+        // 🚨 기존에 잘 작동하던 고유 키 5가지를 따옴표(" ") 안에 꼭 다시 넣어주세요! 🚨
         // =======================================================================
         const MY_SMARTTHINGS_TOKEN = "09321ef2-4a2c-4604-be2d-1edfa94e42f0";
         const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
@@ -219,8 +216,21 @@ HTML
         const MY_MEETING_SCENE_ID = "71323fb1-9a7b-47b1-8a6d-b1a1fbc3909e";
         // =======================================================================
 
-        // 스마트싱스 조명 자동 제어 및 클래스 활성화 로직 정밀화
+        // 🚨 수정됨: 키 입력 누락 및 오류 원인을 화면에 즉시 띄워주는 자가 진단 로직
         function triggerSmartThings(target, sceneId, modeName) {
+            
+            // 오류 검출 1: 마스터키 누락 시 경고창
+            if (MY_SMARTTHINGS_TOKEN === "여기에_마스터키를_붙여넣으세요" || MY_SMARTTHINGS_TOKEN === "") {
+                alert(`[오류] 대표님, 코드 맨 아래쪽 'MY_SMARTTHINGS_TOKEN' 부분에 기존 마스터키 입력이 누락되었습니다! 따옴표(" ") 안에 키를 정확히 넣어주세요.`);
+                return;
+            }
+            
+            // 오류 검출 2: 루틴 ID 누락 시 경고창
+            if (sceneId.includes("여기에_") || sceneId === "") {
+                alert(`[오류] '${modeName}' 버튼의 루틴 ID가 입력되지 않았습니다. 코드 하단을 확인해 주세요.`);
+                return;
+            }
+
             document.querySelectorAll('.light-btn').forEach(btn => btn.classList.remove('active-btn'));
             target.classList.add('active-btn');
             
@@ -233,8 +243,9 @@ HTML
             })
             .then(res => {
                 if(res.ok) console.log(`모드 실행 완료: ${modeName}`);
+                else alert(`[통신 에러] 입력하신 키 또는 ID가 잘못되었거나, 브라우저 보안 정책에 의해 차단되었습니다. 키를 다시 한번 확인해 주세요! (상태 코드: ${res.status})`);
             })
-            .catch(err => console.log("통신 에러가 발생했습니다."));
+            .catch(err => alert(`[통신 에러] 스마트싱스 서버와 연결할 수 없습니다. 인터넷 연결이나 키값을 다시 확인해 주세요.`));
         }
 
         function triggerCheckIn(target) { triggerSmartThings(target, MY_CHECKIN_SCENE_ID, '체크인'); }
@@ -242,19 +253,16 @@ HTML
         function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, '파티 모드'); }
         function triggerMeetingMode(target) { triggerSmartThings(target, MY_MEETING_SCENE_ID, '미팅 모드'); }
 
-        // 외부 수온제어 앱 (TouchSmart) 호출 패스웨이
         function openTouchSmartApp() {
             window.location.href = "touchsmart://";
             setTimeout(() => { if (!document.hidden) alert("TouchSmart 앱을 열 수 없습니다. 태블릿에 설치되어 있는지 확인해 주세요."); }, 1500);
         }
 
-        // 외부 CCTV 앱 (Reolink) 호출 패스웨이
         function openReolinkApp() {
             window.location.href = "reolink://";
             setTimeout(() => { if (!document.hidden) alert("Reolink 앱을 열 수 없습니다. 태블릿에 설치되어 있는지 확인해 주세요."); }, 1500);
         }
 
-        // 실시간 오전/오후 정밀 시계 및 상단 날짜 자동 매칭 엔진
         function refreshTimeAndDate() {
             const date = new Date();
             let hours = date.getHours();
@@ -270,7 +278,6 @@ HTML
         }
         setInterval(refreshTimeAndDate, 1000); refreshTimeAndDate();
 
-        // 실시간 서울 날씨 통계 위젯 동적 연동
         async function fetchWeather() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=37.566&longitude=126.978&current_weather=true&timezone=Asia%2FSeoul');
