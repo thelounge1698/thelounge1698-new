@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screensaver - The Lounge 1698</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap');
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* 고급스러운 호텔 라운지 느낌의 어두운 배경 이미지 */
+            background: linear-gradient(rgba(10, 10, 12, 0.6), rgba(10, 10, 12, 0.8)), url('https://images.unsplash.com/photo-1549633030-89d074305362?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* 반투명 유리 느낌의 시계판 */
+        .clock {
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        /* 시계 바늘 공통 설정 */
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        /* 시, 분, 초침 디자인 */
+        .hour { width: 6px; height: 85px; background: rgba(255, 255, 255, 0.9); margin-left: -3px; }
+        .min { width: 4px; height: 120px; background: rgba(255, 255, 255, 0.7); margin-left: -2px; }
+        .sec { width: 2px; height: 140px; background: #e2b747; margin-left: -1px; } /* 고급스러운 골드 초침 */
+        
+        .center-dot {
+            width: 14px;
+            height: 14px;
+            background: #e2b747;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* 로고 텍스트 */
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 24px;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock">
+        <div class="hand hour" id="hour"></div>
+        <div class="hand min" id="min"></div>
+        <div class="hand sec" id="sec"></div>
+        <div class="center-dot"></div>
+    </div>
+    <div class="logo-text">The Lounge 1698</div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const sec = now.getSeconds();
+            const min = now.getMinutes();
+            const hour = now.getHours();
+
+            const secDeg = sec * 6; 
+            const minDeg = min * 6 + sec * 0.1; 
+            const hourDeg = (hour % 12) * 30 + min * 0.5;
+
+            document.getElementById('sec').style.transform = `rotate(${secDeg}deg)`;
+            document.getElementById('min').style.transform = `rotate(${minDeg}deg)`;
+            document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
