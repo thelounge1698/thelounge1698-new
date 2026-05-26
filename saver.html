@@ -14,60 +14,55 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* 고급스러운 호텔 라운지 느낌의 어두운 배경 이미지 */
-            background: linear-gradient(rgba(10, 10, 12, 0.6), rgba(10, 10, 12, 0.8)), url('https://images.unsplash.com/photo-1549633030-89d074305362?q=80&w=2000&auto=format&fit=crop') no-repeat center center/cover;
+            /* 프로젝터 영상이나 노래방 화면에 완벽히 양보하는 암막 블랙 배경 */
+            background-color: #000000;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* 반투명 유리 느낌의 시계판 */
+        /* 눈부심을 극도로 억제한 고급 아날로그 시계 프레임 */
         .clock {
             width: 320px;
             height: 320px;
             border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: transparent;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255,255,255,0.05);
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
-        /* 시계 바늘 공통 설정 */
+        /* 시계 바늘 레이아웃 구성 */
         .hand {
             position: absolute;
             bottom: 50%;
             left: 50%;
             transform-origin: bottom;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
 
-        /* 시, 분, 초침 디자인 */
-        .hour { width: 6px; height: 85px; background: rgba(255, 255, 255, 0.9); margin-left: -3px; }
-        .min { width: 4px; height: 120px; background: rgba(255, 255, 255, 0.7); margin-left: -2px; }
-        .sec { width: 2px; height: 140px; background: #e2b747; margin-left: -1px; } /* 고급스러운 골드 초침 */
+        /* 어둠 속에서 은은한 실루엣만 스쳐 지나가도록 불투명도 조절 */
+        .hour { width: 4px; height: 85px; background: rgba(255, 255, 255, 0.2); margin-left: -2px; }
+        .min { width: 2px; height: 120px; background: rgba(255, 255, 255, 0.15); margin-left: -1px; }
+        .sec { width: 1px; height: 140px; background: rgba(226, 183, 71, 0.3); margin-left: -0.5px; } /* 다크 무드 골드 초침 */
         
         .center-dot {
-            width: 14px;
-            height: 14px;
-            background: #e2b747;
+            width: 8px;
+            height: 8px;
+            background: rgba(226, 183, 71, 0.4);
             border-radius: 50%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* 로고 텍스트 */
+        /* 명품 호텔 패널 무드의 브랜드 타이틀 디테일 */
         .logo-text {
             font-family: 'Playfair Display', serif;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 24px;
-            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.08); /* 눈이 편안한 최소한의 가독성 8% 유지 */
+            font-size: 20px;
+            letter-spacing: 6px;
         }
     </style>
 </head>
