@@ -11,7 +11,6 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* 완벽한 몰입을 위한 리얼 블랙 배경 */
             background: #000000;
             color: #ffffff;
             min-height: 100vh;
@@ -20,7 +19,6 @@
             user-select: none;
         }
 
-        /* 다크 글래스 효과 (어두운 반투명 유리) */
         .apple-glass {
             background: rgba(30, 30, 35, 0.6);
             backdrop-filter: blur(40px) saturate(150%);
@@ -29,7 +27,6 @@
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
         }
 
-        /* 어두운 위젯 카드 */
         .widget-card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 20px;
@@ -38,7 +35,6 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        /* 다크 모드에 맞춘 활성화 버튼 테두리 (은은한 골드) */
         .active-btn {
             border-color: rgba(226, 183, 71, 0.8) !important;
             box-shadow: 0 0 20px rgba(226, 183, 71, 0.15) !important;
@@ -48,7 +44,6 @@
             color: #e2b747 !important;
         }
 
-        /* 날씨 뱃지도 다크하게 */
         .weather-badge {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -108,43 +103,41 @@
 
             <div class="flex flex-col h-full">
                 <h2 class="text-sm font-bold text-slate-400 mb-3 tracking-wide">
-                    온도 제어 <span class="text-[11px] font-normal text-slate-500">- LG ThinQ</span>
+                    온도 제어 <span class="text-[11px] font-normal text-slate-500">(Temperature Control)</span>
                 </h2>
-                <div class="grid grid-cols-2 gap-4 flex-1">
-                    <div class="widget-card p-5 flex flex-col justify-between hover:bg-white/5 transition">
-                        <span class="text-xs font-bold text-slate-400">메인 홀</span>
-                        <span id="temp-main" class="text-3xl font-black text-white my-1 tracking-tight">22°C</span>
-                        <div class="flex gap-2">
-                            <button onclick="adjustTemp('main', -1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-minus text-xs text-white/70"></i></button>
-                            <button onclick="adjustTemp('main', 1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-plus text-xs text-white/70"></i></button>
+                <div class="grid grid-cols-1 gap-4 flex-1">
+                    
+                    <div onclick="openThinQApp()" class="widget-card p-6 flex flex-col justify-between bg-gradient-to-br from-[#1c1c1e] to-[#2c2c2e] border-white/5 cursor-pointer hover:bg-white/10 transition group">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-snowflake text-xl text-[#60a5fa] animate-pulse"></i>
+                                <span class="text-sm font-bold text-slate-200">LG 천장형 냉난방 제어</span>
+                            </div>
+                            <span class="text-[9px] font-black bg-rose-500/20 text-[#f43f5e] px-2 py-0.5 rounded-full">ThinQ</span>
+                        </div>
+                        <div class="my-2">
+                            <p class="text-2xl font-black text-white tracking-tight">실내 에어컨 조절하기</p>
+                            <p class="text-xs text-slate-400 mt-1">메인 홀 / 휴게실 / 복도 에어컨 통합 링크</p>
+                        </div>
+                        <div class="h-11 rounded-xl bg-[#e11d48] flex items-center justify-center gap-2 text-white font-bold text-sm shadow-md group-hover:bg-[#f43f5e] transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> LG ThinQ 앱 열기
                         </div>
                     </div>
-                    <div class="widget-card p-5 flex flex-col justify-between hover:bg-white/5 transition">
-                        <span class="text-xs font-bold text-slate-400">휴게실 1</span>
-                        <span id="temp-room1" class="text-3xl font-black text-white my-1 tracking-tight">23°C</span>
-                        <div class="flex gap-2">
-                            <button onclick="adjustTemp('room1', -1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-minus text-xs text-white/70"></i></button>
-                            <button onclick="adjustTemp('room1', 1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-plus text-xs text-white/70"></i></button>
-                        </div>
-                    </div>
-                    <div class="widget-card p-5 flex flex-col justify-between hover:bg-white/5 transition">
-                        <span class="text-xs font-bold text-slate-400">복도</span>
-                        <span id="temp-hall" class="text-3xl font-black text-white my-1 tracking-tight">21°C</span>
-                        <div class="flex gap-2">
-                            <button onclick="adjustTemp('hall', -1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-minus text-xs text-white/70"></i></button>
-                            <button onclick="adjustTemp('hall', 1)" class="flex-1 h-9 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 active:scale-95"><i class="fa-solid fa-plus text-xs text-white/70"></i></button>
-                        </div>
-                    </div>
-                    <div onclick="openTouchSmartApp()" class="widget-card p-5 flex flex-col justify-between bg-gradient-to-br from-[#0a192f] to-[#112240] border-[#1d4ed8]/30 cursor-pointer hover:brightness-110 transition group">
+
+                    <div onclick="openTouchSmartApp()" class="widget-card p-6 flex flex-col justify-between bg-gradient-to-br from-[#0a192f] to-[#112240] border-[#1d4ed8]/20 cursor-pointer hover:brightness-110 transition group">
                         <div class="flex justify-between items-start">
-                            <span class="text-xs font-bold text-slate-300">수영장 수온</span>
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-temperature-three-quarters text-xl text-[#60a5fa]"></i>
+                                <span class="text-sm font-bold text-slate-200">수영장 수온 제어</span>
+                            </div>
                             <span class="text-[9px] font-black bg-blue-500/20 text-[#3b82f6] px-1.5 py-0.5 rounded">ELECTRO</span>
                         </div>
                         <span class="text-3xl font-black text-[#60a5fa] tracking-tight group-hover:scale-105 transition-transform origin-left">30°C</span>
-                        <div class="h-9 rounded-xl bg-[#2563eb] flex items-center justify-center gap-2 text-white font-bold text-xs shadow-md shadow-blue-900 group-hover:bg-[#3b82f6]">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> 앱 열기
+                        <div class="h-11 rounded-xl bg-[#2563eb] flex items-center justify-center gap-2 text-white font-bold text-sm shadow-md group-hover:bg-[#3b82f6] transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> TouchSmart 앱 열기
                         </div>
                     </div>
+                    
                 </div>
             </div>
 
@@ -206,7 +199,7 @@
 
     <script>
         // =======================================================================
-        // 🚨 방금 새로 발급받으신 토큰과 루틴 ID를 따옴표(" ") 안에 꼭 다시 넣어주세요! 🚨
+        // 🚨 아까 재발급받은 쌩쌩한 마스터키와 루틴 ID 4개를 여기에 넣어주세요! 🚨
         // =======================================================================
         const MY_SMARTTHINGS_TOKEN = "44d4c515-f9aa-4df7-8c21-99df262a34bd";
         const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
@@ -216,9 +209,8 @@
         // =======================================================================
 
         function triggerSmartThings(target, sceneId, modeName) {
-            
             if (MY_SMARTTHINGS_TOKEN === "여기에_마스터키를_붙여넣으세요" || MY_SMARTTHINGS_TOKEN === "") {
-                alert(`[오류] 대표님, 코드 맨 아래쪽 'MY_SMARTTHINGS_TOKEN' 부분에 마스터키 입력이 누락되었습니다!`);
+                alert(`[오류] 'MY_SMARTTHINGS_TOKEN' 마스터키 입력이 누락되었습니다!`);
                 return;
             }
             if (sceneId.includes("여기에_") || sceneId === "") {
@@ -247,6 +239,17 @@
         function triggerCheckOut(target) { triggerSmartThings(target, MY_CHECKOUT_SCENE_ID, '체크아웃'); }
         function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, '파티 모드'); }
         function triggerMeetingMode(target) { triggerSmartThings(target, MY_MEETING_SCENE_ID, '미팅 모드'); }
+
+        // 🛠️ 추가됨: LG ThinQ 앱 강제 호출 시스템
+        function openThinQApp() {
+            // 안드로이드 표준 LG ThinQ 앱 다이렉트 패스
+            window.location.href = "lgthinq://"; 
+            setTimeout(() => { 
+                if (!document.hidden) {
+                    alert("태블릿에 LG ThinQ 앱이 설치되어 있는지 확인해 주세요. 실행이 안 된다면 Fully Kiosk 설정에서 'Open Other Apps'가 켜져 있는지 확인하셔야 합니다."); 
+                }
+            }, 1500);
+        }
 
         function openTouchSmartApp() {
             window.location.href = "touchsmart://";
@@ -295,13 +298,8 @@
         }
         fetchWeather(); setInterval(fetchWeather, 30 * 60 * 1000);
 
-        function adjustTemp(id, offset) {
-            const el = document.getElementById(`temp-${id}`);
-            if(el) el.innerText = (parseInt(el.innerText) + offset) + "°C";
-        }
-
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).xl.classList.remove('flex'); }
     </script>
 </body>
-</html>
+</html> 
