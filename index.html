@@ -199,13 +199,13 @@
 
     <script>
         // =======================================================================
-        // 🚨 아까 재발급받은 쌩쌩한 마스터키와 루틴 ID 4개를 여기에 넣어주세요! 🚨
+        // 🚨 스마트싱스 키를 여기에 꼭 다시 넣어주세요! (조명 제어용) 🚨
         // =======================================================================
-        const MY_SMARTTHINGS_TOKEN = "44d4c515-f9aa-4df7-8c21-99df262a34bd";
-        const MY_CHECKIN_SCENE_ID = "7b4dd0db-f681-4737-b120-062142955c03";
-        const MY_CHECKOUT_SCENE_ID = "4f77cee2-3343-4e68-b5b2-f57bf8fdae4d";
-        const MY_PARTY_SCENE_ID = "fc20454a-b270-414e-b45d-164fdd647242";
-        const MY_MEETING_SCENE_ID = "71323fb1-9a7b-47b1-8a6d-b1a1fbc3909e";
+        const MY_SMARTTHINGS_TOKEN = "여기에_마스터키를_붙여넣으세요";
+        const MY_CHECKIN_SCENE_ID = "여기에_체크인_ID를_붙여넣으세요";
+        const MY_CHECKOUT_SCENE_ID = "여기에_체크아웃_ID를_붙여넣으세요";
+        const MY_PARTY_SCENE_ID = "여기에_파티모드_ID를_붙여넣으세요";
+        const MY_MEETING_SCENE_ID = "여기에_미팅모드_ID를_붙여넣으세요";
         // =======================================================================
 
         function triggerSmartThings(target, sceneId, modeName) {
@@ -240,26 +240,44 @@
         function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, '파티 모드'); }
         function triggerMeetingMode(target) { triggerSmartThings(target, MY_MEETING_SCENE_ID, '미팅 모드'); }
 
-        // 🛠️ 추가됨: LG ThinQ 앱 강제 호출 시스템
+        // =======================================================================
+        // 🛠️ 안드로이드 전용 강제 앱 호출 기능 (Intent 프로토콜 사용)
+        // =======================================================================
+
         function openThinQApp() {
-            // 안드로이드 표준 LG ThinQ 앱 다이렉트 패스
-            window.location.href = "lgthinq://"; 
+            // LG ThinQ 고유 패키지 이름: com.lgeha.nuts
+            window.location.href = "intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.lgeha.nuts;end;";
+            
             setTimeout(() => { 
                 if (!document.hidden) {
-                    alert("태블릿에 LG ThinQ 앱이 설치되어 있는지 확인해 주세요. 실행이 안 된다면 Fully Kiosk 설정에서 'Open Other Apps'가 켜져 있는지 확인하셔야 합니다."); 
+                    alert("LG ThinQ 앱을 열 수 없습니다. 태블릿 화면에서 직접 실행해 주세요."); 
                 }
             }, 1500);
         }
 
         function openTouchSmartApp() {
-            window.location.href = "touchsmart://";
-            setTimeout(() => { if (!document.hidden) alert("TouchSmart 앱을 열 수 없습니다."); }, 1500);
+            // Elecro TouchSmart 고유 패키지 이름: uk.co.elecro.poolsmartplus
+            window.location.href = "intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=uk.co.elecro.poolsmartplus;end;";
+            
+            setTimeout(() => { 
+                if (!document.hidden) {
+                    alert("TouchSmart 앱을 열 수 없습니다. 다운로드하신 앱 버전이 다를 수 있습니다."); 
+                }
+            }, 1500);
         }
 
         function openReolinkApp() {
-            window.location.href = "reolink://";
-            setTimeout(() => { if (!document.hidden) alert("Reolink 앱을 열 수 없습니다."); }, 1500);
+            // Reolink 고유 패키지 이름: com.mcu.reolink
+            window.location.href = "intent:#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=com.mcu.reolink;end;";
+            
+            setTimeout(() => { 
+                if (!document.hidden) {
+                    alert("Reolink 앱을 열 수 없습니다. 바탕화면에서 직접 실행해 주세요."); 
+                }
+            }, 1500);
         }
+
+        // =======================================================================
 
         function refreshTimeAndDate() {
             const date = new Date();
@@ -299,7 +317,7 @@
         fetchWeather(); setInterval(fetchWeather, 30 * 60 * 1000);
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).xl.classList.remove('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
     </script>
 </body>
-</html> 
+</html>
