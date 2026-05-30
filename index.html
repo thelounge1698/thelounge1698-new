@@ -3,197 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lounge 1698 - Smart Control</title>
+    <title>The Lounge 1698 - Smart OS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            /* 폰트 교체 및 리얼 블랙 배경 */
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
             background: #000000;
             color: #ffffff;
             min-height: 100vh;
             overflow: hidden;
             -webkit-user-select: none;
             user-select: none;
+            letter-spacing: -0.02em; /* 애플 특유의 자간 세팅 */
         }
 
-        .apple-glass {
-            background: rgba(30, 30, 35, 0.6);
-            backdrop-filter: blur(40px) saturate(150%);
-            -webkit-backdrop-filter: blur(40px) saturate(150%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
-
+        /* 아이패드 제어센터 스타일의 모듈 카드 */
         .widget-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: #1c1c1e; /* 애플 다크모드 카드 표준 색상 */
+            border-radius: 28px; /* 애플 특유의 부드러운 곡률 (Squircle 느낌) */
+            transition: all 0.2s ease-out;
+        }
+        
+        .widget-card:active {
+            transform: scale(0.97); /* 터치 시 부드럽게 눌리는 애니메이션 */
+            background: #2c2c2e;
         }
 
+        /* 버튼 활성화 상태 (은은한 화이트 톤업) */
         .active-btn {
-            border-color: rgba(226, 183, 71, 0.8) !important;
-            box-shadow: 0 0 20px rgba(226, 183, 71, 0.15) !important;
-            background-color: rgba(226, 183, 71, 0.05) !important;
+            background: #ffffff !important;
+            color: #000000 !important;
         }
         .active-btn i {
-            color: #e2b747 !important;
+            color: #000000 !important;
+        }
+        .active-btn .icon-bg {
+            background: rgba(0,0,0,0.1) !important;
         }
 
-        .weather-badge {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-        }
+        /* 텍스트 위계 설정 */
+        .text-secondary { color: #8e8e93; } /* 애플 다크모드 보조 텍스트 색상 */
+        
+        /* 숨김 스크롤바 */
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="flex items-center justify-center p-6">
+<body class="flex items-center justify-center p-8">
 
-    <div class="w-full max-w-6xl h-[720px] apple-glass rounded-[40px] p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden">
+    <div class="w-full max-w-6xl h-[720px] flex flex-col justify-between relative">
         
-        <header class="flex justify-between items-start mb-6">
+        <header class="flex justify-between items-end mb-8 px-2">
             <div>
-                <h1 class="text-3xl font-extrabold tracking-tight text-white flex items-center gap-1">
-                    The Lounge 1698 <span class="text-amber-500 text-xl">✦</span>
+                <p id="txt-date" class="text-lg font-medium text-secondary mb-1">날짜 로딩중...</p>
+                <h1 class="text-4xl font-bold tracking-tight text-white flex items-center gap-2">
+                    The Lounge 1698
                 </h1>
-                <p class="text-xs font-semibold text-slate-400 mt-0.5">Smart Space OS v2.0 - Dark Mode</p>
             </div>
             
-            <div class="flex items-center gap-6">
-                <div id="weather-info" class="weather-badge px-4 py-2 rounded-2xl flex items-center gap-2 text-sm font-bold text-slate-300 shadow-sm hidden">
+            <div class="flex items-end gap-6">
+                <div id="weather-info" class="flex items-center gap-2 text-xl font-medium text-white hidden mb-1">
                     <span id="weather-icon">☀️</span>
                     <span id="weather-temp">--°C</span>
                 </div>
                 <div class="text-right">
-                    <div id="txt-date" class="text-xs font-bold text-slate-400 mb-0.5">날짜 로딩중...</div>
-                    <div id="txt-clock" class="text-4xl font-black text-white tracking-tight">00:00</div>
+                    <div id="txt-clock" class="text-6xl font-bold text-white tracking-tighter" style="font-variant-numeric: tabular-nums;">00:00</div>
                 </div>
             </div>
         </header>
 
-        <div class="grid grid-cols-3 gap-8 flex-1 my-4">
+        <div class="grid grid-cols-3 gap-6 flex-1">
             
-            <div class="flex flex-col h-full">
-                <h2 class="text-sm font-bold text-slate-400 mb-3 tracking-wide">
-                    Lighting Mode
-                </h2>
+            <div class="flex flex-col h-full bg-[#1c1c1e] rounded-[36px] p-6">
+                <h2 class="text-sm font-semibold text-secondary mb-5 ml-2 uppercase tracking-wider">Lighting</h2>
                 <div class="grid grid-cols-2 grid-rows-3 gap-3 flex-1">
-                    <button onclick="triggerCheckIn(this)" class="light-btn widget-card flex flex-col items-center justify-center p-3 font-bold text-slate-300 hover:bg-white/10 transition active:scale-95">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg mb-2"><i class="fa-solid fa-house-user text-slate-400"></i></div>
-                        <span class="text-[13px] tracking-tight">Check In</span>
+                    <button onclick="triggerCheckIn(this)" class="light-btn bg-[#2c2c2e] rounded-[24px] flex flex-col items-start justify-between p-4 transition active:scale-95">
+                        <div class="icon-bg w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg mb-4 text-[#ffd60a]"><i class="fa-solid fa-house"></i></div>
+                        <span class="text-[15px] font-semibold tracking-tight">Check In</span>
                     </button>
-                    <button onclick="triggerCheckOut(this)" class="light-btn widget-card flex flex-col items-center justify-center p-3 font-bold text-slate-300 hover:bg-white/10 transition active:scale-95">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg mb-2"><i class="fa-solid fa-power-off text-slate-400"></i></div>
-                        <span class="text-[13px] tracking-tight">Check Out</span>
+                    <button onclick="triggerCheckOut(this)" class="light-btn bg-[#2c2c2e] rounded-[24px] flex flex-col items-start justify-between p-4 transition active:scale-95">
+                        <div class="icon-bg w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg mb-4 text-secondary"><i class="fa-solid fa-power-off"></i></div>
+                        <span class="text-[15px] font-semibold tracking-tight text-secondary">Check Out</span>
                     </button>
-                    <button onclick="triggerPartyMode(this)" class="light-btn widget-card flex flex-col items-center justify-center p-3 font-bold text-slate-300 hover:bg-white/10 transition active:scale-95">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg mb-2"><i class="fa-solid fa-champagne-glasses text-slate-400"></i></div>
-                        <span class="text-[13px] tracking-tight">Party Mode</span>
+                    <button onclick="triggerPartyMode(this)" class="light-btn bg-[#2c2c2e] rounded-[24px] flex flex-col items-start justify-between p-4 transition active:scale-95">
+                        <div class="icon-bg w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg mb-4 text-[#ff9f0a]"><i class="fa-solid fa-champagne-glasses"></i></div>
+                        <span class="text-[15px] font-semibold tracking-tight">Party Mode</span>
                     </button>
-                    <button onclick="triggerMeetingMode(this)" class="light-btn widget-card flex flex-col items-center justify-center p-3 font-bold text-slate-300 hover:bg-white/10 transition active:scale-95">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg mb-2"><i class="fa-solid fa-laptop-code text-slate-400"></i></div>
-                        <span class="text-[13px] tracking-tight">Meeting Mode</span>
+                    <button onclick="triggerMeetingMode(this)" class="light-btn bg-[#2c2c2e] rounded-[24px] flex flex-col items-start justify-between p-4 transition active:scale-95">
+                        <div class="icon-bg w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg mb-4 text-[#30d158]"><i class="fa-solid fa-laptop"></i></div>
+                        <span class="text-[15px] font-semibold tracking-tight">Meeting</span>
                     </button>
-                    <button onclick="triggerManualControl(this)" class="col-span-2 light-btn widget-card flex flex-row items-center justify-center p-3 gap-3 font-bold text-slate-300 hover:bg-white/10 transition active:scale-95">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg"><i class="fa-solid fa-sliders text-slate-400"></i></div>
-                        <span class="text-[13px] tracking-tight">Manual Control</span>
+                    <button onclick="triggerManualControl(this)" class="col-span-2 light-btn bg-[#2c2c2e] rounded-[24px] flex flex-row items-center p-4 gap-4 transition active:scale-95">
+                        <div class="icon-bg w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg text-[#0a84ff]"><i class="fa-solid fa-sliders"></i></div>
+                        <span class="text-[15px] font-semibold tracking-tight">Manual Control</span>
                     </button>
                 </div>
             </div>
 
-            <div class="flex flex-col h-full">
-                <h2 class="text-sm font-bold text-slate-400 mb-3 tracking-wide">
-                    Temperature Control
-                </h2>
-                <div class="grid grid-cols-1 gap-4 flex-1">
-                    <div onclick="openThinQApp()" class="widget-card p-6 flex flex-col justify-between bg-gradient-to-br from-[#1c1c1e] to-[#2c2c2e] border-white/5 cursor-pointer hover:bg-white/10 transition group">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-snowflake text-xl text-[#60a5fa] animate-pulse"></i>
-                                <span class="text-sm font-bold text-slate-200">LG 천장형 냉난방 제어</span>
-                            </div>
-                            <span class="text-[9px] font-black bg-rose-500/20 text-[#f43f5e] px-2 py-0.5 rounded-full">ThinQ</span>
-                        </div>
-                        <div class="my-2">
-                            <p class="text-2xl font-black text-white tracking-tight">실내 에어컨 조절하기</p>
-                            <p class="text-xs text-slate-400 mt-1">메인 홀 / 휴게실 / 복도 에어컨 통합 링크</p>
-                        </div>
-                        <div class="h-11 rounded-xl bg-[#e11d48] flex items-center justify-center gap-2 text-white font-bold text-sm shadow-md group-hover:bg-[#f43f5e] transition">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> LG ThinQ 앱 열기
-                        </div>
-                    </div>
-
-                    <div onclick="openTouchSmartApp()" class="widget-card p-6 flex flex-col justify-between bg-gradient-to-br from-[#0a192f] to-[#112240] border-[#1d4ed8]/20 cursor-pointer hover:brightness-110 transition group">
-                        <div class="flex justify-between items-start">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-temperature-three-quarters text-xl text-[#60a5fa]"></i>
-                                <span class="text-sm font-bold text-slate-200">수영장 수온 제어</span>
-                            </div>
-                            <span class="text-[9px] font-black bg-blue-500/20 text-[#3b82f6] px-1.5 py-0.5 rounded">ELECTRO</span>
-                        </div>
-                        <span class="text-3xl font-black text-[#60a5fa] tracking-tight group-hover:scale-105 transition-transform origin-left">30°C</span>
-                        <div class="h-11 rounded-xl bg-[#2563eb] flex items-center justify-center gap-2 text-white font-bold text-sm shadow-md group-hover:bg-[#3b82f6] transition">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i> TouchSmart 앱 열기
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col h-full">
-                <h2 class="text-sm font-bold text-slate-400 mb-3 tracking-wide">
-                    Information
-                </h2>
+            <div class="flex flex-col h-full bg-[#1c1c1e] rounded-[36px] p-6">
+                <h2 class="text-sm font-semibold text-secondary mb-5 ml-2 uppercase tracking-wider">Climate</h2>
                 <div class="flex flex-col gap-4 flex-1">
-                    <button onclick="openModal('guide-modal')" class="flex-1 rounded-[24px] bg-gradient-to-br from-[#5b54d6] to-[#8a4bba] p-6 text-left text-white flex flex-col justify-between shadow-lg hover:brightness-110 transition active:scale-98">
-                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg"><i class="fa-solid fa-book-open"></i></div>
+                    
+                    <div onclick="openThinQApp()" class="flex-1 bg-[#2c2c2e] rounded-[28px] p-5 flex flex-col justify-between cursor-pointer active:scale-[0.98] transition">
+                        <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#0a84ff]/20 flex items-center justify-center text-[#0a84ff] text-lg">
+                                <i class="fa-solid fa-snowflake"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-secondary bg-white/5 px-2 py-1 rounded-full uppercase tracking-wider">ThinQ</span>
+                        </div>
                         <div>
-                            <h3 class="text-lg font-bold mb-1 tracking-tight">세부 안내문</h3>
-                            <p class="text-xs opacity-80 leading-relaxed font-medium">프로젝터, 쓰레기, 샤워실 사용법 등</p>
+                            <p class="text-xl font-semibold text-white tracking-tight mb-0.5">Air Conditioner</p>
+                            <p class="text-[13px] text-secondary">실내 온도 제어</p>
+                        </div>
+                    </div>
+
+                    <div onclick="openTouchSmartApp()" class="flex-1 bg-[#2c2c2e] rounded-[28px] p-5 flex flex-col justify-between cursor-pointer active:scale-[0.98] transition">
+                        <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-full bg-[#30d158]/20 flex items-center justify-center text-[#30d158] text-lg">
+                                <i class="fa-solid fa-water"></i>
+                            </div>
+                            <span class="text-[10px] font-bold text-secondary bg-white/5 px-2 py-1 rounded-full uppercase tracking-wider">Elecro</span>
+                        </div>
+                        <div>
+                            <p class="text-xl font-semibold text-white tracking-tight mb-0.5">Pool Heater</p>
+                            <p class="text-[13px] text-secondary">수영장 수온 제어</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex flex-col h-full bg-[#1c1c1e] rounded-[36px] p-6">
+                <h2 class="text-sm font-semibold text-secondary mb-5 ml-2 uppercase tracking-wider">Information</h2>
+                <div class="flex flex-col gap-4 flex-1">
+                    
+                    <button onclick="openModal('guide-modal')" class="flex-1 bg-[#2c2c2e] rounded-[28px] p-5 flex flex-col justify-between text-left active:scale-[0.98] transition">
+                        <div class="w-10 h-10 rounded-full bg-[#5e5ce6]/20 flex items-center justify-center text-[#5e5ce6] text-lg">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div>
+                            <p class="text-xl font-semibold text-white tracking-tight mb-0.5">User Guide</p>
+                            <p class="text-[13px] text-secondary">프로젝터 및 샤워실 사용법</p>
                         </div>
                     </button>
-                    <div class="flex-1 rounded-[24px] bg-gradient-to-br from-[#c43a53] to-[#a02239] p-5 text-white flex flex-col justify-between shadow-lg">
-                        <div class="flex items-center gap-2 font-bold text-sm bg-white/20 w-fit px-3 py-1 rounded-full mb-1">
-                            <i class="fa-solid fa-triangle-exclamation text-xs"></i> 안전 주의사항
+
+                    <div class="flex-1 bg-[#2c2c2e] rounded-[28px] p-5 flex flex-col justify-between">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-triangle-exclamation text-[#ff453a]"></i>
+                            <span class="text-sm font-semibold text-[#ff453a]">Safety Rules</span>
                         </div>
-                        <ul class="space-y-1.5 text-xs font-semibold opacity-90">
-                            <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-white opacity-60"></span> 음주 수영 금지</li>
-                            <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-white opacity-60"></span> 다이빙 금지 (수심 1m)</li>
-                            <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-white opacity-60"></span> 뛰지 않기</li>
+                        <ul class="space-y-2 text-[13px] text-secondary font-medium ml-1">
+                            <li class="flex items-center gap-2"><div class="w-1 h-1 rounded-full bg-secondary"></div>음주 수영 절대 금지</li>
+                            <li class="flex items-center gap-2"><div class="w-1 h-1 rounded-full bg-secondary"></div>다이빙 금지 (수심 1m)</li>
+                            <li class="flex items-center gap-2"><div class="w-1 h-1 rounded-full bg-secondary"></div>바닥 미끄럼 주의</li>
                         </ul>
                     </div>
+
                 </div>
             </div>
         </div>
 
-        <footer class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center text-xs font-bold text-slate-400">
-            <button onclick="openReolinkApp()" class="flex items-center bg-white/5 hover:bg-white/10 text-slate-300 px-4 py-2 rounded-xl transition border border-white/5 active:scale-95">
-                <span class="status-dot dot-green"></span> CCTV 보안 가동 중 • (클릭 시 앱 오픈)
+        <footer class="mt-6 flex justify-between items-center px-2">
+            <button onclick="openReolinkApp()" class="flex items-center gap-2 bg-[#1c1c1e] hover:bg-[#2c2c2e] text-secondary text-[13px] font-medium px-4 py-2.5 rounded-full transition active:scale-95">
+                <i class="fa-solid fa-shield-halved text-[#30d158]"></i> Security Camera Active
             </button>
-            <div class="flex items-center gap-4 text-[10px] tracking-wider text-slate-500">
-                <span class="font-black uppercase border border-slate-600 rounded px-1.5 py-0.5 bg-white/5 text-slate-400">WORKS WITH ThinQ</span>
-                <span>Designed for The Lounge 1698 by SmartOS</span>
+            <div class="text-[12px] font-medium text-secondary/50 tracking-wide">
+                Smart Space OS
             </div>
         </footer>
     </div>
 
-    <div id="guide-modal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-6 z-50">
-        <div class="bg-[#1c1c1e] border border-white/10 rounded-[32px] w-full max-w-xl p-10 shadow-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold tracking-tight text-white">매장 이용 가이드</h3>
-                <button onclick="closeModal('guide-modal')" class="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center text-2xl hover:bg-white/20">&times;</button>
+    <div id="guide-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl hidden items-center justify-center p-6 z-50 transition-opacity">
+        <div class="bg-[#1c1c1e] rounded-[36px] w-full max-w-lg p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold tracking-tight text-white">이용 가이드</h3>
+                <button onclick="closeModal('guide-modal')" class="w-8 h-8 rounded-full bg-[#2c2c2e] text-secondary flex items-center justify-center text-xl hover:bg-white/20 transition">&times;</button>
             </div>
-            <div class="space-y-6">
-                <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
-                    <h4 class="font-bold mb-2 text-slate-200">🎬 프로젝터 빔 제어</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">스마트 리모컨의 '홈' 버튼을 누르고 넷플릭스 또는 유튜브 앱을 실행해 주세요.</p>
+            <div class="space-y-4">
+                <div class="p-5 bg-[#2c2c2e] rounded-[24px]">
+                    <h4 class="font-semibold mb-1 text-white flex items-center gap-2"><i class="fa-solid fa-video text-secondary"></i> 프로젝터 빔 제어</h4>
+                    <p class="text-[14px] text-secondary leading-relaxed">스마트 리모컨의 '홈' 버튼을 누르고 넷플릭스 또는 유튜브 앱을 실행해 주세요.</p>
                 </div>
-                <div class="p-5 bg-white/5 rounded-2xl border border-white/5">
-                    <h4 class="font-bold mb-2 text-slate-200">🚿 샤워실 이용</h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">샤워실 온수는 왼쪽으로 돌리면 나옵니다. 사용 후에는 꼭 전원을 꺼주세요.</p>
+                <div class="p-5 bg-[#2c2c2e] rounded-[24px]">
+                    <h4 class="font-semibold mb-1 text-white flex items-center gap-2"><i class="fa-solid fa-shower text-secondary"></i> 샤워실 이용</h4>
+                    <p class="text-[14px] text-secondary leading-relaxed">샤워실 온수는 왼쪽으로 돌리면 나옵니다. 사용 후에는 꼭 전원을 꺼주세요.</p>
                 </div>
             </div>
         </div>
@@ -210,7 +205,6 @@
         const MY_MEETING_SCENE_ID = "0011189b-c23e-4fc3-a59c-b8b033011657";
         const MY_MANUAL_SCENE_ID = "43769691-7587-4c34-a8f4-02d0de2f6736"; // 새로 추가된 ID!
         // =======================================================================
-
         function triggerSmartThings(target, sceneId, modeName) {
             if (MY_SMARTTHINGS_TOKEN === "여기에_마스터키를_붙여넣으세요" || MY_SMARTTHINGS_TOKEN === "") {
                 alert(`[오류] 'MY_SMARTTHINGS_TOKEN' 마스터키 입력이 누락되었습니다!`);
@@ -221,6 +215,7 @@
                 return;
             }
 
+            // 버튼 활성화 UI 처리
             document.querySelectorAll('.light-btn').forEach(btn => btn.classList.remove('active-btn'));
             target.classList.add('active-btn');
             
@@ -238,7 +233,6 @@
             .catch(err => alert(`[통신 에러] 스마트싱스 서버와 연결할 수 없습니다.`));
         }
 
-        // 5가지 모드 연결 함수 (영어 텍스트 반영)
         function triggerCheckIn(target) { triggerSmartThings(target, MY_CHECKIN_SCENE_ID, 'Check In'); }
         function triggerCheckOut(target) { triggerSmartThings(target, MY_CHECKOUT_SCENE_ID, 'Check Out'); }
         function triggerPartyMode(target) { triggerSmartThings(target, MY_PARTY_SCENE_ID, 'Party Mode'); }
@@ -246,7 +240,7 @@
         function triggerManualControl(target) { triggerSmartThings(target, MY_MANUAL_SCENE_ID, 'Manual Control'); }
 
         // =======================================================================
-        // 🚀 Fully Kiosk 다이렉트 앱 실행 엔진
+        // 🚀 Fully Kiosk 다이렉트 앱 실행 엔진 (기능 100% 유지)
         // =======================================================================
         function launchAppDirectly(packageName) {
             if (typeof fully !== 'undefined' && typeof fully.startApplication === 'function') {
@@ -258,7 +252,7 @@
         }
 
         function openThinQApp() { launchAppDirectly("com.lgeha.nuts"); }
-        function openTouchSmartApp() { launchAppDirectly("uk.co.elecro.poolsmart"); }
+        function openTouchSmartApp() { launchAppDirectly("uk.co.elecro.poolsmartplus"); }
         function openReolinkApp() { launchAppDirectly("com.mcu.reolink"); }
         // =======================================================================
 
@@ -266,14 +260,17 @@
             const date = new Date();
             let hours = date.getHours();
             const minutes = String(date.getMinutes()).padStart(2, '0');
-            const ampm = hours >= 12 ? '오후' : '오전';
+            const ampm = hours >= 12 ? 'PM' : 'AM';
             hours = hours % 12;
             hours = hours ? hours : 12; 
             
-            document.getElementById('txt-clock').innerText = `${ampm} ${String(hours).padStart(2, '0')}:${minutes}`;
+            document.getElementById('txt-clock').innerText = `${String(hours).padStart(2, '0')}:${minutes}`;
             
-            const days = ['일', '월', '화', '수', '목', '금', '토'];
-            document.getElementById('txt-date').innerText = `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 ${days[date.getDay()]}요일`;
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            // 날짜도 애플 감성에 맞춰 영문으로 간결하게 변경
+            document.getElementById('txt-date').innerText = `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}`;
         }
         setInterval(refreshTimeAndDate, 1000); refreshTimeAndDate();
 
@@ -284,9 +281,8 @@
                 const temp = Math.round(data.current_weather.temperature);
                 const code = data.current_weather.weathercode;
                 
-                let icon = '☁️';
-                if (code === 0) icon = '☀️';
-                else if (code === 1 || code === 2 || code === 3) icon = '⛅️';
+                let icon = '☀️';
+                if (code >= 1 && code <= 3) icon = '⛅️';
                 else if (code >= 51 && code <= 67) icon = '🌧';
                 else if (code >= 95) icon = '⛈';
 
@@ -299,8 +295,21 @@
         }
         fetchWeather(); setInterval(fetchWeather, 30 * 60 * 1000);
 
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+        function openModal(id) { 
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden'); 
+            modal.classList.add('flex');
+            // 부드러운 페이드 인 효과를 위해 약간의 지연 후 투명도 조절
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
+        }
+        function closeModal(id) { 
+            const modal = document.getElementById(id);
+            modal.style.opacity = '0';
+            setTimeout(() => { 
+                modal.classList.add('hidden'); 
+                modal.classList.remove('flex'); 
+            }, 200); // 트랜지션 시간 후 완전히 숨김
+        }
     </script>
 </body>
 </html>
