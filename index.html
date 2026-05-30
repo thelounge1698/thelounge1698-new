@@ -196,15 +196,16 @@
 
     <script>
         // =======================================================================
-        // 🚨 스마트싱스 마스터키와 5개의 루틴 ID를 모두 채워주세요! 🚨
+        // 🚨 기존에 발급받으신 스마트싱스 마스터키와 5개의 루틴 ID를 넣어주세요!
         // =======================================================================
         const MY_SMARTTHINGS_TOKEN = "3fa9f631-b8af-4023-a50f-75957cb3b4f0";
         const MY_CHECKIN_SCENE_ID = "bf08bbd2-6b2a-4618-8409-fcbb5b882605";
         const MY_CHECKOUT_SCENE_ID = "ec831071-0503-4796-9990-26743efe3df2";
         const MY_PARTY_SCENE_ID = "02994224-1b00-4622-aaa3-0043f2a21f34";
         const MY_MEETING_SCENE_ID = "0011189b-c23e-4fc3-a59c-b8b033011657";
-        const MY_MANUAL_SCENE_ID = "43769691-7587-4c34-a8f4-02d0de2f6736"; // 새로 추가된 ID!
+        const MY_MANUAL_SCENE_ID = "43769691-7587-4c34-a8f4-02d0de2f6736";
         // =======================================================================
+
         function triggerSmartThings(target, sceneId, modeName) {
             if (MY_SMARTTHINGS_TOKEN === "여기에_마스터키를_붙여넣으세요" || MY_SMARTTHINGS_TOKEN === "") {
                 alert(`[오류] 'MY_SMARTTHINGS_TOKEN' 마스터키 입력이 누락되었습니다!`);
